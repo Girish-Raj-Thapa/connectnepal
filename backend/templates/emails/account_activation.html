@@ -1,0 +1,21 @@
+{% extends 'emails/base_email.html' %} {% block header_title %}Congratulations
+on joining ConnectNepal!{% endblock %} {% block header_subtitle %}{{ user_email }}{% endblock %}
+{% block content %}
+<p>Welcome!</p>
+
+<p>We're thrilled to have you as part of our vibrant community.</p>
+
+<p>
+  Verify your email and set password to activate your account, click on the
+  following link:
+</p>
+
+<a href="{{ activation_link }}" class="action-button">Verify Email Address</a>
+
+<p>We look forward to seeing you. Welcome aboard!</p>
+
+<p style="margin-top: 30px">
+  Best regards,<br />
+  <strong style="color: #0d9488">ConnectNepal</strong>
+</p>
+{% endblock %}

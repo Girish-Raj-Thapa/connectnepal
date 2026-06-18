@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+fyp_backend/
+venv/
+env/
+.venv/
+
+# Environment Variables 
+.env
+.env.prod
+
+# Django
+logs/
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Testing & Coverage 
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & OS 
+.vscode/
+.idea/
+*.iml
+.DS_Store
+docs
+fyp
+
+seed_images
+artifacts
+
+# Celery Beat
+celerybeat-schedule
+celerybeat-schedule.db
+celerybeat-schedule.*
+# Keep recommendation runtime artifacts
+!recommendations/artifacts/
+!recommendations/artifacts/**

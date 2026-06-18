@@ -1,0 +1,44 @@
+{% extends 'emails/base_email.html' %}
+
+{% block header_title %}New Review Posted{% endblock %}
+{% block header_subtitle %}{{ user_email }}{% endblock %}
+
+{% block content %}
+<p>Hi {{ host_user.full_name|default:host_user.email }},</p>
+
+<p>A traveller has left a new review on <strong>{{ target_title }}</strong>.</p>
+
+<!-- Rating Banner -->
+<div style="background-color: #f0fdfa; border: 2px solid #14b8a6; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
+  <p style="margin: 0; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;">Rating</p>
+  <p style="margin: 8px 0 0; font-size: 32px;">
+    {% for i in "12345" %}{% if forloop.counter <= review.rating %}⭐{% endif %}{% endfor %}
+  </p>
+  <p style="margin: 6px 0 0; font-size: 22px; font-weight: 700; color: #0f766e;">{{ review.rating }} / 5</p>
+</div>
+
+<!-- Review Details -->
+<div style="background-color: #f9fafb; border-left: 4px solid #14b8a6; border-radius: 8px; padding: 20px; margin: 20px 0;">
+  <p style="margin: 0 0 10px; font-size: 14px; color: #6b7280;">
+    Reviewed by <strong style="color: #111827;">{{ review.traveller.full_name|default:review.traveller.email }}</strong>
+    on {{ review.created_at|date:"D, d M Y" }}
+  </p>
+
+  {% if review.comment %}
+  <p style="margin: 0; font-size: 15px; color: #374151; font-style: italic; line-height: 1.6;">
+    "{{ review.comment }}"
+  </p>
+  {% else %}
+  <p style="margin: 0; font-size: 14px; color: #9ca3af;">No written comment.</p>
+  {% endif %}
+</div>
+
+<div class="security-note" style="margin-top: 24px;">
+  You can respond to this review from your host dashboard. Thoughtful replies help build trust with future travellers.
+</div>
+
+<p style="margin-top: 30px;">
+  Thank you for being part of ConnectNepal!<br />
+  <strong style="color: #0d9488">ConnectNepal Team</strong>
+</p>
+{% endblock %}

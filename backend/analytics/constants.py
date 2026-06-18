@@ -1,0 +1,30 @@
+from decimal import Decimal
+
+from bookings.models import BookingItemStatus, PaymentStatus as BookingPaymentStatus
+from reviews.models import ReviewStatus
+from trip_planner.models import TripStatus
+
+TREND_MONTH_COUNT = 6
+TRAVELLER_PREVIEW_LIMIT = 5
+HOST_PREVIEW_LIMIT = 5
+ADMIN_RECENT_ACTIVITY_LIMIT = 10
+ADMIN_TOP_PERFORMANCE_LIMIT = 5
+
+ZERO_MONEY = Decimal('0.00')
+ZERO_RATING = Decimal('0.00')
+
+TRAVELLER_ACTIVE_TRIP_PLAN_STATUSES = (
+    TripStatus.PLANNING,
+    TripStatus.PARTIALLY_BOOKED,
+    TripStatus.BOOKED,
+)
+TRAVELLER_UPCOMING_BOOKING_STATUS = BookingItemStatus.CONFIRMED
+TRAVELLER_COMPLETED_BOOKING_STATUS = BookingItemStatus.COMPLETED
+TRAVELLER_EXCLUDED_REVIEW_STATUS = ReviewStatus.USER_DELETED
+
+HOST_COUNTABLE_BOOKING_ITEM_STATUSES = (
+    BookingItemStatus.CONFIRMED,
+    BookingItemStatus.COMPLETED,
+)
+HOST_EARNINGS_PAYMENT_STATUS = BookingPaymentStatus.PAYMENT_SUCCEEDED
+PUBLISHED_REVIEW_STATUS = ReviewStatus.PUBLISHED

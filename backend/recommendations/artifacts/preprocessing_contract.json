@@ -1,0 +1,147 @@
+{
+  "artifact_version": "2.0.0",
+  "schema_version": "content_based_recommender.v2",
+  "required_raw_input_fields": [
+    "title",
+    "description",
+    "destination",
+    "category",
+    "activity_type",
+    "difficulty_level",
+    "duration_type",
+    "duration_days",
+    "duration_nights",
+    "average_duration_hours",
+    "duration_text",
+    "tags",
+    "ideal_for",
+    "best_seasons",
+    "languages_offered",
+    "max_group_size",
+    "instant_confirmation",
+    "is_bookable",
+    "is_active"
+  ],
+  "canonical_output_fields": [
+    "item_id",
+    "source_name",
+    "source_row_number",
+    "title",
+    "description",
+    "destination",
+    "destination_norm",
+    "destination_group",
+    "category",
+    "category_mapped",
+    "activity_type",
+    "activity_type_mapped",
+    "activity_type_for_ohe",
+    "difficulty_level",
+    "difficulty_level_norm",
+    "duration_type",
+    "duration_type_mapped",
+    "duration_text",
+    "duration_days",
+    "duration_days_filled",
+    "duration_nights",
+    "duration_nights_filled",
+    "average_duration_hours",
+    "average_duration_hours_filled",
+    "tags",
+    "tags_list",
+    "ideal_for",
+    "ideal_for_list",
+    "best_seasons",
+    "best_seasons_list",
+    "languages_offered",
+    "languages_offered_list",
+    "max_group_size",
+    "instant_confirmation",
+    "is_bookable",
+    "is_active",
+    "meta_token_text",
+    "combined_text"
+  ],
+  "categorical_columns": [
+    "category_mapped",
+    "activity_type_for_ohe",
+    "difficulty_level_norm",
+    "duration_type_mapped"
+  ],
+  "multi_value_columns": [
+    "tags_list",
+    "ideal_for_list",
+    "best_seasons_list",
+    "languages_offered_list"
+  ],
+  "numeric_columns": [
+    "duration_days_filled",
+    "duration_nights_filled",
+    "average_duration_hours_filled",
+    "max_group_size"
+  ],
+  "boolean_columns": [
+    "instant_confirmation",
+    "is_bookable",
+    "is_active"
+  ],
+  "semantic_boolean_columns": [],
+  "non_semantic_runtime_fields": [
+    "instant_confirmation",
+    "is_bookable",
+    "is_active"
+  ],
+  "default_fill_behavior": {
+    "text_fields": "",
+    "list_fields": [],
+    "boolean_fields": false,
+    "destination_norm": "unknown_destination when source destination is blank",
+    "activity_type_mapped": "unknown when source activity_type is blank",
+    "difficulty_level_norm": "easy when value is blank or out of vocabulary",
+    "duration_type_mapped": {
+      "HALF_DAY": "half_day",
+      "FULL_DAY": "full_day",
+      "MULTI_DAY": "multi_day",
+      "default": "full_day"
+    },
+    "duration_days_filled": {
+      "half_day": 0.5,
+      "full_day": 1.0,
+      "multi_day": 2.0
+    },
+    "duration_nights_filled": {
+      "half_day": 0.0,
+      "full_day": 0.0,
+      "multi_day": "max(duration_days_filled - 1, 1)"
+    },
+    "average_duration_hours_filled": {
+      "half_day": 4.0,
+      "full_day": 7.0,
+      "multi_day": "duration_days_filled * 8.0"
+    },
+    "max_group_size": 0.0
+  },
+  "expected_duration_type_values": [
+    "half_day",
+    "full_day",
+    "multi_day"
+  ],
+  "expected_difficulty_values": [
+    "easy",
+    "moderate",
+    "challenging",
+    "difficult",
+    "expert"
+  ],
+  "identity_contract": {
+    "notebook_item_id_role": "Training and evaluation identifier only.",
+    "production_identity_requirement": "Django live indexing must use the DB primary key or UUID as the production item identity.",
+    "stability_note": "Notebook item_id values can change if content fields change, so they must not be treated as live production IDs."
+  },
+  "notes": [
+    "Use prepare_items() as the canonical logical contract for both training and live listings.",
+    "split_pipe() accepts pipe-delimited strings, JSON-array strings, and Python iterable inputs.",
+    "Half-day is preserved as half_day and is not collapsed into hourly.",
+    "Category mapping must preserve the exported rule order and fallback behavior exactly."
+  ]
+}

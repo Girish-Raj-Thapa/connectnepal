@@ -1,0 +1,33 @@
+{
+  "artifact_version": "2.0.0",
+  "created_at_utc": "2026-03-23T14:35:01.270590+00:00",
+  "schema_version": "content_based_recommender.v2",
+  "training_dataset_size": 1440,
+  "vector_dimension": 128,
+  "sparse_feature_dimension": 10775,
+  "production_intent": "pgvector retrieval",
+  "identity_contract": {
+    "notebook_item_id_role": "Training and evaluation identifier only.",
+    "production_identity_requirement": "Django live indexing must use the DB primary key or UUID as the production item identity.",
+    "stability_note": "Notebook item_id values can change if content fields change, so they must not be treated as live production IDs."
+  },
+  "backend_serving_note": "Use the exported bundle only to transform listings into dense vectors. pgvector should perform nearest-neighbor retrieval over live DB listing vectors. The notebook artifacts are not the direct recommendation-serving engine that returns final listing IDs.",
+  "artifact_filenames": {
+    "production_transform_bundle": "production_transform_bundle.pkl",
+    "artifact_manifest": "artifact_manifest.json",
+    "preprocessing_contract": "preprocessing_contract.json",
+    "feature_config": "feature_config.json",
+    "mapping_config": "mapping_config.json",
+    "training_metrics_summary": "training_metrics_summary.json",
+    "canonical_scraped_final": "canonical_scraped_final.csv",
+    "offline_recommender_debug": "offline_recommender_debug.pkl",
+    "evaluation_metrics_per_item": "evaluation_metrics_per_item.csv",
+    "sample_recommendations": "sample_recommendations.md",
+    "transform_sanity_samples": "transform_sanity_samples.json"
+  },
+  "notes": [
+    "The notebook is not the production serving engine.",
+    "The production-facing export is the transform bundle for generating dense vectors.",
+    "Django should use DB PK or UUID as live item identity, not notebook item_id values."
+  ]
+}

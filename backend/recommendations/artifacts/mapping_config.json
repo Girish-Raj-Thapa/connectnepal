@@ -1,0 +1,189 @@
+{
+  "destination_aliases": {
+    "kathmandu valley": "kathmandu valley",
+    "kathmandu": "kathmandu",
+    "pokhara valley": "pokhara",
+    "pokhara": "pokhara",
+    "sarangkot": "sarangkot",
+    "chitwan national park": "chitwan",
+    "chitwan": "chitwan",
+    "lumbini development zone": "lumbini",
+    "lumbini": "lumbini",
+    "nagarkot": "nagarkot",
+    "bhaktapur": "bhaktapur",
+    "patan": "patan",
+    "bandipur": "bandipur",
+    "mustang": "mustang",
+    "annapurna region": "annapurna region",
+    "everest region": "everest region",
+    "langtang region": "langtang region",
+    "bhote koshi": "bhote koshi"
+  },
+  "destination_group_map": {
+    "kathmandu": "kathmandu_valley",
+    "kathmandu valley": "kathmandu_valley",
+    "patan": "kathmandu_valley",
+    "bhaktapur": "kathmandu_valley",
+    "nagarkot": "kathmandu_valley",
+    "pokhara": "pokhara_annapurna",
+    "sarangkot": "pokhara_annapurna",
+    "annapurna region": "pokhara_annapurna",
+    "chitwan": "chitwan_region",
+    "lumbini": "lumbini_region",
+    "mustang": "mustang_region",
+    "everest region": "everest_region",
+    "langtang region": "langtang_region",
+    "bandipur": "bandipur_region",
+    "bhote koshi": "bhote_koshi_region"
+  },
+  "activity_map": {
+    "TREKKING": "trekking",
+    "CITY_TOUR": "city_tour",
+    "HIKING": "hiking",
+    "TEMPLE_VISIT": "temple_visit",
+    "HOMESTAY": "homestay",
+    "COOKING_CLASS": "cooking_class",
+    "BIRD_WATCHING": "bird_watching",
+    "CYCLING": "cycling",
+    "RAFTING": "rafting",
+    "MEDITATION": "meditation",
+    "WILDLIFE_SAFARI": "wildlife_safari",
+    "YOGA": "yoga",
+    "MOUNTAIN_FLIGHT": "mountain_flight",
+    "PARAGLIDING": "paragliding",
+    "BUNGEE": "bungee",
+    "OVERLAND_ADVENTURE": "overland_adventure",
+    "CULTURAL_WORKSHOP": "cultural_workshop",
+    "FOOD_TOUR": "food_tour",
+    "BOATING": "boating",
+    "ROCK_CLIMBING": "rock_climbing"
+  },
+  "difficulty_fallback_map": {
+    "hard": "difficult"
+  },
+  "duration_type_map": {
+    "HALF_DAY": "half_day",
+    "FULL_DAY": "full_day",
+    "MULTI_DAY": "multi_day"
+  },
+  "category_mapping_contract": {
+    "rule_order": [
+      "festival",
+      "trekking",
+      "wellness",
+      "food_tours",
+      "village",
+      "nature",
+      "photography",
+      "heritage",
+      "adventure"
+    ],
+    "activity_to_category_rules": {
+      "festival": [],
+      "trekking": [
+        "TREKKING"
+      ],
+      "wellness": [
+        "YOGA",
+        "MEDITATION"
+      ],
+      "food_tours": [
+        "COOKING_CLASS",
+        "FOOD_TOUR"
+      ],
+      "village": [
+        "HOMESTAY"
+      ],
+      "nature": [
+        "BIRD_WATCHING",
+        "WILDLIFE_SAFARI"
+      ],
+      "photography": [],
+      "heritage": [
+        "TEMPLE_VISIT"
+      ],
+      "adventure": [
+        "HIKING",
+        "CYCLING",
+        "RAFTING",
+        "PARAGLIDING",
+        "BUNGEE",
+        "MOUNTAIN_FLIGHT",
+        "OVERLAND_ADVENTURE",
+        "BOATING",
+        "ROCK_CLIMBING"
+      ]
+    },
+    "keyword_rules": {
+      "festival": [
+        "festival"
+      ],
+      "trekking": [
+        "trekking",
+        "teahouse",
+        "base camp",
+        "himalaya treks"
+      ],
+      "wellness": [
+        "wellness",
+        "retreat",
+        "mindfulness",
+        "yoga",
+        "meditation"
+      ],
+      "food_tours": [
+        "food",
+        "kitchen",
+        "cooking",
+        "culinary"
+      ],
+      "village": [
+        "homestay",
+        "community",
+        "village",
+        "rural",
+        "local life"
+      ],
+      "nature": [
+        "wildlife",
+        "birding",
+        "jungle",
+        "forest",
+        "nature"
+      ],
+      "photography": [
+        "photography",
+        "photo"
+      ],
+      "heritage": [
+        "heritage",
+        "unesco",
+        "old town",
+        "durbar",
+        "pilgrimage",
+        "monaster",
+        "sacred",
+        "temple",
+        "landmark"
+      ],
+      "adventure": [
+        "adventure",
+        "outdoor",
+        "adrenaline",
+        "flightseeing",
+        "air tours",
+        "scenic flights",
+        "viewpoints",
+        "sunrise trips"
+      ]
+    },
+    "text_fields_used": [
+      "category",
+      "title",
+      "description",
+      "tags"
+    ],
+    "fallback_category": "cultural",
+    "implementation_note": "Backend Python should preserve this exact rule order and OR-semantics between activity matches and keyword matches."
+  }
+}

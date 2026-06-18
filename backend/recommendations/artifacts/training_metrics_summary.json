@@ -1,0 +1,96 @@
+{
+  "artifact_version": "2.0.0",
+  "created_at_utc": "2026-03-23T14:35:01.270590+00:00",
+  "schema_version": "content_based_recommender.v2",
+  "training_dataset_size": 1440,
+  "vector_dimension": 128,
+  "dense_explained_variance_ratio_sum": 0.7344008470131698,
+  "training_comparison": {
+    "top_k": 5,
+    "n_evaluated_items": 1440,
+    "sparse": {
+      "n_evaluated_items": 1440,
+      "precision_at_k_mean": 0.9977777777777778,
+      "recall_at_k_mean": 0.041629152732781165,
+      "avg_cosine_similarity_at_k_mean": 0.6458318285934245,
+      "category_match_rate_at_k_mean": 0.8961111111111112,
+      "activity_type_match_rate_at_k_mean": 0.9677777777777778,
+      "destination_match_rate_at_k_mean": 0.6294444444444445,
+      "destination_group_match_rate_at_k_mean": 0.6725
+    },
+    "dense": {
+      "n_evaluated_items": 1440,
+      "precision_at_k_mean": 0.9983333333333333,
+      "recall_at_k_mean": 0.041648938946008754,
+      "avg_cosine_similarity_at_k_mean": 0.8261039896325755,
+      "category_match_rate_at_k_mean": 0.9068055555555556,
+      "activity_type_match_rate_at_k_mean": 0.9719444444444445,
+      "destination_match_rate_at_k_mean": 0.6066666666666666,
+      "destination_group_match_rate_at_k_mean": 0.6483333333333333
+    },
+    "dense_vs_sparse": {
+      "overlap_at_k_mean": 0.7083333333333334,
+      "precision_delta_mean": 0.0005555555555555314,
+      "category_match_delta_mean": 0.01069444444444445,
+      "activity_type_match_delta_mean": 0.004166666666666652,
+      "destination_match_delta_mean": -0.022777777777777897,
+      "destination_group_match_delta_mean": -0.02416666666666667,
+      "avg_cosine_similarity_delta_mean": 0.180272161039151
+    }
+  },
+  "unseen_query_comparison": {
+    "top_k": 5,
+    "n_queries": 8,
+    "sparse": {
+      "n_queries": 8,
+      "category_match_rate_at_k_mean": 0.95,
+      "activity_type_match_rate_at_k_mean": 1.0,
+      "destination_match_rate_at_k_mean": 0.7,
+      "destination_group_match_rate_at_k_mean": 0.775,
+      "avg_cosine_similarity_at_k_mean": 0.6823273299456811
+    },
+    "dense": {
+      "n_queries": 8,
+      "category_match_rate_at_k_mean": 0.95,
+      "activity_type_match_rate_at_k_mean": 1.0,
+      "destination_match_rate_at_k_mean": 0.675,
+      "destination_group_match_rate_at_k_mean": 0.775,
+      "avg_cosine_similarity_at_k_mean": 0.8964778153235236
+    },
+    "dense_vs_sparse": {
+      "overlap_at_k_mean": 0.7250000000000001,
+      "category_match_delta_mean": 0.0,
+      "activity_type_match_delta_mean": 0.0,
+      "destination_match_delta_mean": -0.02499999999999991,
+      "destination_group_match_delta_mean": 0.0,
+      "avg_cosine_similarity_delta_mean": 0.21415048537784243
+    }
+  },
+  "identity_contract": {
+    "notebook_item_id_role": "Training and evaluation identifier only.",
+    "production_identity_requirement": "Django live indexing must use the DB primary key or UUID as the production item identity.",
+    "stability_note": "Notebook item_id values can change if content fields change, so they must not be treated as live production IDs."
+  },
+  "metrics_caveat": {
+    "precision_at_k_note": "Precision@5 of ~99.8% is inflated because the notebook's get_relevant_item_ids() defines relevance broadly (same activity OR same category+destination OR same category+difficulty+duration). With 1440 clustered tourism listings, this creates very large relevant sets per seed. The metric confirms the model is not broken, but does not measure recommendation quality granularity. Manual review on live DB listings (103 seeded, never seen during training) confirmed recommendations are contextually appropriate.",
+    "recommended_phase2_eval": [
+      "Stricter relevance: require same category AND same destination_group AND similar difficulty",
+      "Manual review on 20-30 real listings across categories",
+      "Category/activity/destination diversity checks per result set",
+      "Bad recommendation examples collection for edge cases"
+    ]
+  },
+  "backend_serving_note": "Use the exported bundle only to transform listings into dense vectors. pgvector should perform nearest-neighbor retrieval over live DB listing vectors. The notebook artifacts are not the direct recommendation-serving engine that returns final listing IDs.",
+  "optuna_best_params": {
+    "W_TFIDF": 1.4592529880253635,
+    "W_CATEGORICAL": 0.7662404456689167,
+    "W_MULTI_VALUE": 0.2396666328698741,
+    "W_NUMERIC": 0.12294392064842627,
+    "BONUS_DESTINATION": 0.16474918123208132,
+    "BONUS_DESTINATION_GROUP": 0.15493899246850254,
+    "BONUS_ACTIVITY": 0.1925141926391777,
+    "BONUS_CATEGORY": 0.12298231542068731,
+    "BONUS_DIFFICULTY": 0.012660891537464357,
+    "CANDIDATE_POOL": 28
+  }
+}

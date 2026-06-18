@@ -1,0 +1,67 @@
+{% extends 'emails/base_email.html' %}
+
+{% block header_title %}Booking {{ booking.status|capfirst }}{% endblock %}
+{% block header_subtitle %}{{ user_email }}{% endblock %}
+
+{% block content %}
+<p>Hi {{ user.full_name|default:user.email }},</p>
+
+<p>{{ reason_text }}</p>
+
+<!-- Booking Reference Banner -->
+<div style="background-color: #fef2f2; border: 2px solid #f87171; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
+  <p style="margin: 0; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;">Booking Reference</p>
+  <p style="margin: 6px 0 0; font-size: 26px; font-weight: 700; color: #dc2626; letter-spacing: 2px;">{{ booking.reference }}</p>
+  <p style="margin: 8px 0 0; font-size: 13px; color: #6b7280; text-transform: uppercase;">{{ booking.status }}</p>
+</div>
+
+<!-- Cancelled Activities -->
+<h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; margin-top: 30px;">
+  Cancelled Activities
+</h3>
+
+{% for item in items %}
+<div style="background-color: #f9fafb; border-left: 4px solid #d1d5db; border-radius: 8px; padding: 16px; margin: 12px 0; opacity: 0.85;">
+  <p style="margin: 0 0 8px; font-size: 17px; font-weight: 600; color: #374151;">
+    {{ item.title }}
+  </p>
+
+  {% if item.destination %}
+  <p style="margin: 4px 0; font-size: 14px; color: #6b7280;">
+    📍 {{ item.destination }}
+  </p>
+  {% endif %}
+
+  <table style="width: 100%; font-size: 14px; color: #6b7280; margin-top: 10px; border-collapse: collapse;">
+    <tr>
+      <td style="padding: 4px 0; width: 50%;"><strong>Date:</strong></td>
+      <td style="padding: 4px 0;">
+        {{ item.start_date|date:"D, d M Y" }}
+        {% if item.end_date and item.end_date != item.start_date %}
+          &nbsp;→&nbsp;{{ item.end_date|date:"D, d M Y" }}
+        {% endif %}
+      </td>
+    </tr>
+    {% if item.start_time %}
+    <tr>
+      <td style="padding: 4px 0;"><strong>Time:</strong></td>
+      <td style="padding: 4px 0;">{{ item.start_time|time:"g:i A" }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td style="padding: 4px 0;"><strong>Travellers:</strong></td>
+      <td style="padding: 4px 0;">{{ item.traveller_count }} person{{ item.traveller_count|pluralize }}</td>
+    </tr>
+  </table>
+</div>
+{% endfor %}
+
+<div class="security-note" style="margin-top: 28px;">
+  If you believe this is an error or need assistance, contact us at <strong>info@connectnepal.com</strong>.
+</div>
+
+<p style="margin-top: 30px;">
+  We hope to see you exploring Nepal soon.<br />
+  <strong style="color: #0d9488">ConnectNepal Team</strong>
+</p>
+{% endblock %}

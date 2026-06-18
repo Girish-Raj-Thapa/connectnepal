@@ -1,0 +1,91 @@
+{
+  "artifact_version": "2.0.0",
+  "schema_version": "content_based_recommender.v2",
+  "text_base_columns": [
+    "title",
+    "description",
+    "destination_norm",
+    "destination_group"
+  ],
+  "categorical_columns": [
+    "category_mapped",
+    "activity_type_for_ohe",
+    "difficulty_level_norm",
+    "duration_type_mapped"
+  ],
+  "multi_value_columns": [
+    "tags_list",
+    "ideal_for_list",
+    "best_seasons_list",
+    "languages_offered_list"
+  ],
+  "numeric_columns": [
+    "duration_days_filled",
+    "duration_nights_filled",
+    "average_duration_hours_filled",
+    "max_group_size"
+  ],
+  "semantic_boolean_columns": [],
+  "non_semantic_runtime_fields": [
+    "instant_confirmation",
+    "is_bookable",
+    "is_active"
+  ],
+  "weights": {
+    "tfidf": 1.4592529880253635,
+    "categorical": 0.7662404456689167,
+    "multi_value": 0.2396666328698741,
+    "numeric": 0.12294392064842627
+  },
+  "rerank_bonus": {
+    "destination": 0.16474918123208132,
+    "destination_group": 0.15493899246850254,
+    "activity": 0.1925141926391777,
+    "category": 0.12298231542068731,
+    "difficulty": 0.012660891537464357
+  },
+  "candidate_pool": 28,
+  "top_k": 5,
+  "tfidf": {
+    "max_features": 10000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 3,
+    "max_df": 0.85,
+    "sublinear_tf": true,
+    "stop_words": "english"
+  },
+  "dense_projection": {
+    "target_dim": 128,
+    "normalization": "l2",
+    "random_state": 42,
+    "actual_fitted_dim": 128,
+    "explained_variance_ratio_sum": 0.7344008470131698
+  },
+  "prefixed_token_recipe": {
+    "destination_repeat": 8,
+    "destination_group_repeat": 5,
+    "category_repeat": 3,
+    "difficulty_repeat": 2,
+    "duration_repeat": 2,
+    "activity_repeat": 4,
+    "tag_repeat": 2,
+    "ideal_repeat": 1,
+    "season_repeat": 1,
+    "language_repeat": 1
+  },
+  "combined_text_recipe": {
+    "title_repeat": 2,
+    "destination_repeat": 2,
+    "destination_group_repeat": 2,
+    "meta_token_text_included": true
+  },
+  "notes": [
+    "Sparse TF-IDF plus metadata is retained for notebook-side evaluation only.",
+    "Dense vectors are the production-facing pgvector bridge.",
+    "NON_SEMANTIC_RUNTIME_FIELDS are excluded from the semantic vector space.",
+    "Use the exported bundle only to transform listings into dense vectors. pgvector should perform nearest-neighbor retrieval over live DB listing vectors. The notebook artifacts are not the direct recommendation-serving engine that returns final listing IDs."
+  ]
+}
