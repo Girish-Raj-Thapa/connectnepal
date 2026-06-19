@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Package } from 'lucide-react';
+import { FEATURE_FLAGS } from '@config/features';
 import { useAuth } from '@context/AuthContext';
 import {
 	useForYouListings,
@@ -111,8 +112,9 @@ const buildPackageParams = (f: PublicPackageFilterState): URLSearchParams => {
 
 const PublicListings = () => {
 	const { user } = useAuth();
-	const isTraveller = !!user && user.role === 'traveller';
-	const canTrackBrowsingInteractions = !!user;
+	const recommendationsEnabled = FEATURE_FLAGS.recommendations;
+	const isTraveller = !!user && user.role === 'traveller' && recommendationsEnabled;
+	const canTrackBrowsingInteractions = !!user && recommendationsEnabled;
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	// Tab state — initialized from ?tab URL param; defaults to listings
@@ -776,16 +778,18 @@ const PublicListings = () => {
 											Clear all filters
 										</button>
 									)}
-									<RecommendationGrid
-										title="You Might Like These Instead"
-										listings={suggestedListings}
-										meta={suggestedMeta}
-										surface="for_you"
-										loading={suggestedLoading}
-										error={suggestedError}
-										columns={3}
-										skeletonCount={3}
-									/>
+									{recommendationsEnabled && (
+										<RecommendationGrid
+											title="You Might Like These Instead"
+											listings={suggestedListings}
+											meta={suggestedMeta}
+											surface="for_you"
+											loading={suggestedLoading}
+											error={suggestedError}
+											columns={3}
+											skeletonCount={3}
+										/>
+									)}
 								</div>
 							)}
 
@@ -855,7 +859,7 @@ const PublicListings = () => {
 									</div>
 								</div>
 
-								{shouldShowTopPackageRecommendations && (
+								{recommendationsEnabled && shouldShowTopPackageRecommendations && (
 									<PackageRecommendationGrid
 										title="Recommended Packages For You"
 										packages={suggestedPackages}
@@ -924,7 +928,7 @@ const PublicListings = () => {
 												Clear Filters
 											</button>
 										)}
-										{shouldShowEmptyStatePackageRecommendations && (
+										{recommendationsEnabled && shouldShowEmptyStatePackageRecommendations && (
 											<div className="mt-10 text-left">
 												<PackageRecommendationGrid
 													title="Recommended Packages For You"

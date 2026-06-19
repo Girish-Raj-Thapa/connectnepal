@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'corsheaders',
     'django_filters',
+    'django_celery_beat',
 
     # Local apps
     'utils.apps.UtilsConfig',
@@ -225,6 +226,9 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 # FRONTEND DOMAIN URL 
 FRONTEND_URL = config('FRONTEND_URL')
 
+ENABLE_CHATBOT = config('ENABLE_CHATBOT', default=True, cast=bool)
+ENABLE_RECOMMENDATIONS = config('ENABLE_RECOMMENDATIONS', default=True, cast=bool)
+
 
 # JWT 
 SIMPLE_JWT = {
@@ -382,7 +386,7 @@ RECOMMENDATION_BEHAVIOR_ENABLED = config(
 
 
 # eSewa
-ESEWA_SECRET_KEY = config('ESEWA_SECRET_KEY', default='8gBm/:&EnhH.1/q')
+ESEWA_SECRET_KEY = config('ESEWA_SECRET_KEY')
 ESEWA_PRODUCT_CODE = config('ESEWA_PRODUCT_CODE', default='EPAYTEST')
 ESEWA_PAYMENT_URL = config('ESEWA_PAYMENT_URL', default='https://rc-epay.esewa.com.np/api/epay/main/v2/form')
 ESEWA_STATUS_CHECK_URL = config('ESEWA_STATUS_CHECK_URL', default='https://rc.esewa.com.np/api/epay/transaction/status/')

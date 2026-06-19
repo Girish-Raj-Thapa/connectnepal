@@ -180,6 +180,19 @@ VITE_API_URL=http://localhost:8000/api
 - WebSocket notification URL construction
 - resolving backend-relative media URLs such as `/media/...`
 
+For the Docker/Nginx production-style setup in this repository, use the public
+Nginx origin instead:
+
+```env
+VITE_API_URL=http://localhost/api
+```
+
+In real production this should be the public HTTPS origin, for example:
+
+```env
+VITE_API_URL=https://app.example.com/api
+```
+
 ### 4. Start the development server
 
 ```bash

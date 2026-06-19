@@ -13,6 +13,7 @@ import {
     ShieldCheck,
     Settings,
 } from 'lucide-react';
+import { FEATURE_FLAGS } from "@config/features";
 import type { UserRole } from "@/types/accounts";
 import { ROUTES } from "@/constants/routes";
 
@@ -145,13 +146,13 @@ export const sidebarConfig: SidebarConfig = {
                     icon: AlertTriangle,
                     path: ROUTES.TRAVELLER_COMPLAINTS,
                 },
-                {
+                ...(FEATURE_FLAGS.chatbot ? [{
                     id: 'traveller-chat-history',
-                    type: 'link',
+                    type: 'link' as const,
                     label: 'Chat History',
                     icon: MessageCircle,
                     path: ROUTES.TRAVELLER_CHAT_HISTORY,
-                },
+                }] : []),
             ],
         },
         {

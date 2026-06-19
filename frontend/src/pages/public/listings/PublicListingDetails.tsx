@@ -8,6 +8,7 @@ import {
 	BadgeCheck,
 	MessageCircle,
 } from 'lucide-react';
+import { FEATURE_FLAGS } from '@config/features';
 import { useAuth } from '@context/AuthContext';
 import { useChat } from '@context/ChatContext';
 import publicListingsService from '@/services/publicListings.service';
@@ -35,7 +36,9 @@ const PublicListingDetails = () => {
 	const location = useLocation();
 	const { user } = useAuth();
 	const { openChat, setContext } = useChat();
-	const canTrackBrowsingInteractions = !!user;
+	const recommendationsEnabled = FEATURE_FLAGS.recommendations;
+	const chatbotEnabled = FEATURE_FLAGS.chatbot;
+	const canTrackBrowsingInteractions = !!user && recommendationsEnabled;
 
 	const [listing, setListing] = useState<ListingDetail | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -47,6 +50,7 @@ const PublicListingDetails = () => {
 
 	// Fire detail_open exactly once, routed to the correct tracking endpoint.
 	useEffect(() => {
+		if (!recommendationsEnabled) return;
 		const navigationContext = (location.state as ListingNavigationState | null)
 			?.listingNavigationContext;
 
@@ -91,13 +95,14 @@ const PublicListingDetails = () => {
 			eventType: 'detail_open',
 			surface: 'listing_detail',
 		}]);
-	}, [canTrackBrowsingInteractions, listing?.id, location.state]);
+	}, [canTrackBrowsingInteractions, listing?.id, location.state, recommendationsEnabled]);
 
 	useEffect(() => {
+		if (!chatbotEnabled) return;
 		if (!listing?.id) return;
 		setContext({ listingId: listing.id });
 		return () => setContext({ listingId: null });
-	}, [listing?.id, setContext]);
+	}, [chatbotEnabled, listing?.id, setContext]);
 
 	useEffect(() => {
 		setIsOverviewExpanded(false);
@@ -572,29 +577,33 @@ const PublicListingDetails = () => {
 							</section>
 
 						{/* Similar Listings */}
-						<RecommendationGrid
-							title="You Might Also Like"
-							listings={similarListings}
-							meta={similarMeta}
-							surface="similar"
-							loading={similarLoading}
-							error={similarError}
-							columns={3}
-							skeletonCount={3}
-						/>
+						{recommendationsEnabled && (
+							<RecommendationGrid
+								title="You Might Also Like"
+								listings={similarListings}
+								meta={similarMeta}
+								surface="similar"
+								loading={similarLoading}
+								error={similarError}
+								columns={3}
+								skeletonCount={3}
+							/>
+						)}
 					</div>
 
 					{/* Right Sidebar */}
 					<aside className="lg:col-span-1">
 						<BookingSidebar listing={listing} />
-						<button
-							type="button"
-							onClick={() => openChat({ listingId: listing.id })}
-							className="flex items-center justify-center gap-2 w-full mt-4 px-4 py-2.5 text-sm font-semibold text-teal-700 border-2 border-teal-200 rounded-xl hover:bg-teal-50 hover:border-teal-400 transition-all"
-						>
-							<MessageCircle className="w-4 h-4" />
-							Ask about this listing
-						</button>
+						{chatbotEnabled && (
+							<button
+								type="button"
+								onClick={() => openChat({ listingId: listing.id })}
+								className="flex items-center justify-center gap-2 w-full mt-4 px-4 py-2.5 text-sm font-semibold text-teal-700 border-2 border-teal-200 rounded-xl hover:bg-teal-50 hover:border-teal-400 transition-all"
+							>
+								<MessageCircle className="w-4 h-4" />
+								Ask about this listing
+							</button>
+						)}
 					</aside>
 				</div>
 			</div>

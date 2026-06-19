@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from chatbot.services.faq_service import regenerate_embeddings_for_items
+from connectnepal.feature_flags import chatbot_enabled
 from pages.default_faqs import DEFAULT_FAQ_CATEGORIES
 from pages.models import FAQCategory, FAQItem
 
@@ -69,6 +69,16 @@ class Command(BaseCommand):
         )
 
         if options["regenerate_embeddings"]:
+            if not chatbot_enabled():
+                self.stdout.write(
+                    self.style.WARNING(
+                        "Skipped FAQ embedding regeneration because chatbot is disabled."
+                    )
+                )
+                return
+
+            from chatbot.services.faq_service import regenerate_embeddings_for_items
+
             seeded_items = FAQItem.objects.filter(pk__in=seeded_item_ids).select_related("category")
             count = regenerate_embeddings_for_items(seeded_items)
             self.stdout.write(

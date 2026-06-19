@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { FEATURE_FLAGS } from '@config/features';
 import RecommendationsService from '@services/recommendations.service';
 import type { RecommendationMeta } from '@services/recommendations.service';
 import type { RecommendationListing } from '@/types/listings';
@@ -17,7 +18,7 @@ export function useSimilarListings(listingId: number | null, limit = 6) {
 	const lastRequestKeyRef = useRef<string | null>(null);
 
 	const fetchSimilar = useCallback(async () => {
-		if (!listingId) return;
+		if (!FEATURE_FLAGS.recommendations || !listingId) return;
 
 		const fetchId = ++fetchIdRef.current;
 		setLoading(true);
@@ -43,8 +44,12 @@ export function useSimilarListings(listingId: number | null, limit = 6) {
 	}, [listingId, limit]);
 
 	useEffect(() => {
-		const requestKey = listingId ? `${listingId}:${limit}` : null;
+		const requestKey = FEATURE_FLAGS.recommendations && listingId ? `${listingId}:${limit}` : null;
 		if (!requestKey) {
+			setListings([]);
+			setMeta(null);
+			setLoading(false);
+			setError(null);
 			lastRequestKeyRef.current = null;
 			return;
 		}
@@ -70,7 +75,7 @@ export function useForYouListings(limit = 12, enabled = true) {
 	const lastRequestKeyRef = useRef<string | null>(null);
 
 	const fetchForYou = useCallback(async () => {
-		if (!enabled) return;
+		if (!FEATURE_FLAGS.recommendations || !enabled) return;
 
 		const fetchId = ++fetchIdRef.current;
 		setLoading(true);
@@ -96,8 +101,12 @@ export function useForYouListings(limit = 12, enabled = true) {
 	}, [limit, enabled]);
 
 	useEffect(() => {
-		const requestKey = enabled ? `for-you:${limit}` : null;
+		const requestKey = FEATURE_FLAGS.recommendations && enabled ? `for-you:${limit}` : null;
 		if (!requestKey) {
+			setListings([]);
+			setMeta(null);
+			setLoading(false);
+			setError(null);
 			lastRequestKeyRef.current = null;
 			return;
 		}
@@ -123,7 +132,7 @@ export function useForYouPackages(limit = 3, enabled = true) {
 	const lastRequestKeyRef = useRef<string | null>(null);
 
 	const fetchForYouPackages = useCallback(async () => {
-		if (!enabled) return;
+		if (!FEATURE_FLAGS.recommendations || !enabled) return;
 
 		const fetchId = ++fetchIdRef.current;
 		setLoading(true);
@@ -149,8 +158,12 @@ export function useForYouPackages(limit = 3, enabled = true) {
 	}, [enabled, limit]);
 
 	useEffect(() => {
-		const requestKey = enabled ? `package-for-you:${limit}` : null;
+		const requestKey = FEATURE_FLAGS.recommendations && enabled ? `package-for-you:${limit}` : null;
 		if (!requestKey) {
+			setPackages([]);
+			setMeta(null);
+			setLoading(false);
+			setError(null);
 			lastRequestKeyRef.current = null;
 			return;
 		}

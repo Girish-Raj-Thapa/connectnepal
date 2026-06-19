@@ -2,6 +2,7 @@ from django.db import transaction
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
+from connectnepal.feature_flags import recommendations_enabled
 from utils.files import delete_file_field
 from .models import Listing, ListingImage, ListingSchedule
 
@@ -101,6 +102,8 @@ def _capture_listing_reco_fields(sender, instance, **kwargs):
     """
     Snapshot recommendation-relevant field values before save so the post_save signal can detect actual value changes (not just field presence in update_fields).
     """
+    if not recommendations_enabled():
+        return
     if not instance.pk:
         return
     try:
@@ -121,6 +124,8 @@ def trigger_reco_reindex_on_listing_change(sender, instance, created, **kwargs):
     For new listings: reindex if the listing is visible (active + bookable).
     For updates: compare current values against pre-save snapshot to avoid noisy reindexing on unrelated saves.
     """
+    if not recommendations_enabled():
+        return
     if created:
         if instance.is_active and instance.is_bookable:
             _dispatch_reco_reindex(instance.pk)

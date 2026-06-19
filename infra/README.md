@@ -1,12 +1,12 @@
 # Infrastructure
 
-This folder will contain production and development infrastructure files for ConnectNepal.
+This folder contains infrastructure and deployment-related files for ConnectNepal.
 
-Planned contents:
+Current contents:
 
-- Docker Compose configuration
-- Backend and frontend container setup
-- Reverse proxy configuration
-- Deployment scripts
-- Environment variable examples
-- Backup and restore scripts
+- `docker-compose.yml`
+- `docker-compose.dev.yml`
+- `docker-compose.prod.yml`
+- `docker-info.md`
+
+These files define and document the Docker-based local and production runtime layout.

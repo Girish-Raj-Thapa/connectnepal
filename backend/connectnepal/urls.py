@@ -24,6 +24,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularRedocView,
 )
+from connectnepal.feature_flags import chatbot_enabled, recommendations_enabled
 from utils.views import health_live, health_ready
 
 
@@ -87,18 +88,22 @@ urlpatterns = [
     # Complaints App — admin
     path('api/admin/complaints/', include('complaints.urls.admin_urls', namespace='complaints_admin')),
 
-    # Recommendations App
-    path('api/recommendations/', include('recommendations.urls', namespace='recommendations')),
-
     # Notifications App
     path("api/notifications/", include("notifications.urls", namespace="notifications")),
 
     # Pages App
     path("api/pages/", include("pages.urls", namespace="pages")),
-
-    # Chatbot App
-    path('api/chatbot/', include('chatbot.urls', namespace='chatbot')),
 ]
+
+if recommendations_enabled():
+    urlpatterns.append(
+        path('api/recommendations/', include('recommendations.urls', namespace='recommendations'))
+    )
+
+if chatbot_enabled():
+    urlpatterns.append(
+        path('api/chatbot/', include('chatbot.urls', namespace='chatbot'))
+    )
 
 # Serve media files in development
 if settings.DEBUG:

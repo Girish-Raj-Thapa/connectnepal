@@ -1,0 +1,13 @@
+services:
+  postgres:
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  redis:
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
+  api:
+    environment:
+      AUTO_APPLY_MIGRATIONS: ${AUTO_APPLY_MIGRATIONS:-true}
+      AUTO_COLLECTSTATIC: ${AUTO_COLLECTSTATIC:-true}

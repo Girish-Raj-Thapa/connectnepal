@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Bot, House, Layers3, Map, ShieldCheck, Sparkles } from 'lucide-react';
+import { FEATURE_FLAGS } from '@config/features';
 import { useAuth } from '@context/AuthContext';
 import Navbar from '@components/layout/Navbar';
 import { useForYouListings } from '@/hooks/useRecommendations';
@@ -16,7 +17,8 @@ type ActivityFilter = '' | ListingCategory;
 const Home = () => {
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const isTraveller = !!user && user.role === 'traveller';
+	const recommendationsEnabled = FEATURE_FLAGS.recommendations;
+	const isTraveller = !!user && user.role === 'traveller' && recommendationsEnabled;
 	const [destination, setDestination] = useState('');
 	const [activity, setActivity] = useState<ActivityFilter>('');
 	const [priceRange, setPriceRange] = useState('');

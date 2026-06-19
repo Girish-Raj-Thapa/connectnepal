@@ -1,0 +1,39 @@
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    mem_limit: ${POSTGRES_MEM_LIMIT:-1g}
+    cpus: ${POSTGRES_CPUS:-1.0}
+
+  redis:
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - ${REDIS_MAXMEMORY:-256mb}
+      - --maxmemory-policy
+      - ${REDIS_MAXMEMORY_POLICY:-allkeys-lru}
+    mem_limit: ${REDIS_MEM_LIMIT:-256m}
+    cpus: ${REDIS_CPUS:-0.50}
+
+  api:
+    environment:
+      AUTO_APPLY_MIGRATIONS: "false"
+      AUTO_COLLECTSTATIC: "false"
+    mem_limit: ${API_MEM_LIMIT:-768m}
+    cpus: ${API_CPUS:-1.0}
+
+  nginx:
+    mem_limit: ${NGINX_MEM_LIMIT:-128m}
+    cpus: ${NGINX_CPUS:-0.50}
+
+  celery-worker:
+    environment:
+      CELERY_CONCURRENCY: ${CELERY_CONCURRENCY:-2}
+    mem_limit: ${CELERY_WORKER_MEM_LIMIT:-768m}
+    cpus: ${CELERY_WORKER_CPUS:-1.0}
+
+  celery-beat:
+    mem_limit: ${CELERY_BEAT_MEM_LIMIT:-256m}
+    cpus: ${CELERY_BEAT_CPUS:-0.50}

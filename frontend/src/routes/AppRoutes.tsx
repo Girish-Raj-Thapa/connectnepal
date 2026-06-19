@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react';
 import PrivateRoutes from './PrivateRoutes';
 import RoleRoutes from './RoleRoutes';
 import PageLoader from '@components/feedback/PageLoader';
+import { FEATURE_FLAGS } from '@config/features';
 import { ROUTES } from '@/constants/routes';
 
 // Lazy load auth pages
@@ -299,10 +300,12 @@ const AppRoutes = () => {
 								path={ROUTES.TRAVELLER_SETTINGS}
 								element={<Settings />}
 							/>
-							<Route
-								path={ROUTES.TRAVELLER_CHAT_HISTORY}
-								element={<ChatHistory />}
-							/>
+							{FEATURE_FLAGS.chatbot && (
+								<Route
+									path={ROUTES.TRAVELLER_CHAT_HISTORY}
+									element={<ChatHistory />}
+								/>
+							)}
 
 						{/* Payment callback landing pages */}
 						<Route path={ROUTES.PAYMENT_PROCESSING} element={<PaymentProcessing />} />

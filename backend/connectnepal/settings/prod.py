@@ -5,6 +5,7 @@ Usage: DJANGO_SETTINGS_MODULE=connectnepal.settings.prod
 """
 from .base import *  # noqa: F403, F401
 from decouple import Csv
+from decouple import config
 
 DEBUG = False
 
@@ -20,27 +21,33 @@ CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=Csv())  # noqa: F405
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())  # noqa: F405
 
 
-# Cookie settings — strict HTTPS
-CSRF_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SECURE = True
-COOKIE_SECURE = True
-COOKIE_SAMESITE = 'None'
+# HTTPS / proxy behavior
+# These default to strict production-safe values, but can be disabled for local
+# Docker runs that are intentionally plain HTTP behind an internal reverse proxy.
+TRUST_X_FORWARDED_PROTO = config('TRUST_X_FORWARDED_PROTO', default=True, cast=bool)
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=True, cast=bool)
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
+ENABLE_HSTS = config('ENABLE_HSTS', default=True, cast=bool)
+
+# Cookie settings — strict in real HTTPS production, configurable for local HTTP.
+CSRF_COOKIE_SAMESITE = 'None' if CSRF_COOKIE_SECURE else 'Lax'
+COOKIE_SECURE = SESSION_COOKIE_SECURE
+COOKIE_SAMESITE = 'None' if SESSION_COOKIE_SECURE else 'Lax'
 COOKIE_DOMAIN = None
 
 
 # HTTPS security 
 # SECURE_PROXY_SSL_HEADER is required because Nginx terminates SSL
 # and forwards traffic to Gunicorn as plain HTTP internally.
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') if TRUST_X_FORWARDED_PROTO else None
 
 # HSTS — start with 1 hour (3600).
 # After confirming HTTPS works correctly for 1+ weeks, increase to 31536000 (1 year).
 # Do NOT set SECURE_HSTS_PRELOAD = True until you are certain you will keep HTTPS forever
 # (preload is very hard to undo — it requires HSTS preload list removal which takes months).
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_SECONDS = 3600 if ENABLE_HSTS else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = ENABLE_HSTS
 SECURE_HSTS_PRELOAD = False
 
 # Silence the HSTS preload warning — we intentionally keep preload off until

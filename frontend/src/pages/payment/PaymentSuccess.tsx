@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, generatePath } from 'react-router-dom';
 import { CheckCircle2, AlertCircle, Calendar, Users } from 'lucide-react';
+import { FEATURE_FLAGS } from '@config/features';
 import Navbar from '@components/layout/Navbar';
 import Loader from '@components/feedback/Loader';
 import Button from '@components/button/Button';
@@ -173,16 +174,18 @@ const PaymentSuccess = () => {
 					</div>
 
 					{/* Post-booking upsell */}
-					<RecommendationGrid
-						title="Explore Similar Activities"
-						listings={similarListings}
-						meta={similarMeta}
-						surface="similar"
-						loading={similarLoading}
-						error={similarError}
-						columns={3}
-						skeletonCount={3}
-					/>
+					{FEATURE_FLAGS.recommendations && (
+						<RecommendationGrid
+							title="Explore Similar Activities"
+							listings={similarListings}
+							meta={similarMeta}
+							surface="similar"
+							loading={similarLoading}
+							error={similarError}
+							columns={3}
+							skeletonCount={3}
+						/>
+					)}
 
 				</div>
 			</div>
